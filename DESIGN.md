@@ -8,7 +8,7 @@ AI agents that execute multi-step development plans need to coordinate. Each age
 tasks exist, which are claimed, and what other agents discovered. Without a coordination layer,
 agents duplicate work, lose inter-session context, and require manual task routing.
 
-forge-ai solves this by exposing 10 MCP tools that map directly to forge-tracker REST endpoints.
+forge-ai solves this by exposing 28 MCP tools that map directly to forge-tracker REST endpoints.
 Agents connect over stdio, call tools to manage plans and tasks, and share findings through a
 tag-based memory system. The server adds no persistent state of its own -- forge-tracker is the
 single source of truth.
@@ -46,13 +46,12 @@ From the perspective of an AI agent using forge-ai:
 - **Conflict resolution.** No locking or optimistic concurrency on task assignment.
 - **Persistent connections.** The server is stdio-only. No WebSocket or SSE transport.
 - **Authentication.** forge-tracker handles access control. forge-ai passes requests through.
-- **Plan creation.** Agents read and update plans. Plan authoring happens outside forge-ai.
 
 ## Success Criteria
 
 | Criteria                            | Target                                    |
 |-------------------------------------|-------------------------------------------|
-| MCP tools registered                | 10                                        |
+| MCP tools registered                | 28                                        |
 | Test coverage (unit)                | All controller and driver functions tested |
 | Lint stages                         | lint-tags, lint-licenses, lint all pass    |
 | Build artifacts                     | 3 (generate-tracker-client, generate-mocks, binary) |
@@ -73,9 +72,11 @@ From the perspective of an AI agent using forge-ai:
 |  forge-ai MCP Server                                                |
 |                                                                     |
 |  +-------------------+    +------------------+    +---------------+ |
-|  | MCP Driver        |    | Controllers      |    | Adapter       | |
-|  | (10 tool regs)    |--->| PlanManager      |--->| TrackerClient | |
-|  |                   |    | MemoryManager    |    | (interface)   | |
+|  | MCP Driver        |    | Controllers        |    | Adapter       | |
+|  | (28 tool regs)    |--->| PlanManager        |--->| TrackerClient | |
+|  |                   |    | MemoryManager      |    | (interface)   | |
+|  |                   |    | TrackingSetManager |    |               | |
+|  |                   |    | EdgeManager        |    |               | |
 |  +-------------------+    +------------------+    +------+--------+ |
 |                                                          |          |
 +----------------------------------------------------------+----------+
@@ -100,8 +101,10 @@ main()
                 +--> adapter.NewHTTPTrackerClient(url)
                 +--> controller.NewPlanManager(client)
                 +--> controller.NewMemoryManager(client)
+                +--> controller.NewTrackingSetManager(client)
+                +--> controller.NewEdgeManager(client)
                 +--> mcpserver.New("forge-ai", version)
-                +--> mcpdriver.RegisterTools(server, planMgr, memMgr)
+                +--> mcpdriver.RegisterTools(server, planMgr, memMgr, tsMgr, edgeMgr)
                 +--> server.RunDefault()  // stdio loop
 ```
 
@@ -199,18 +202,36 @@ extracts tags by finding the first `[...]` prefix. This avoids schema changes in
 
 ### MCP Tool Catalog
 
-| #  | Tool             | Controller     | Method          | Tracker API calls |
-|----|------------------|----------------|-----------------|-------------------|
-| 1  | list-metaplans   | PlanManager    | ListMetaPlans   | 1 (ListMetaPlans) |
-| 2  | get-metaplan     | PlanManager    | GetMetaPlan     | 1 (GetMetaPlan)   |
-| 3  | list-plans       | PlanManager    | ListPlans       | 1 (ListPlans)     |
-| 4  | get-plan-state   | PlanManager    | GetPlanState    | 1 (GetPlan)       |
-| 5  | list-tasks       | PlanManager    | ListTasks       | 1 (ListTickets)   |
-| 6  | get-task         | PlanManager    | GetTask         | 1 (GetTicket)     |
-| 7  | assign-task      | PlanManager    | AssignTask      | 2 (Get + Update)  |
-| 8  | complete-task    | PlanManager    | CompleteTask    | 2 (Get + Update)  |
-| 9  | add-comment      | MemoryManager  | AddComment      | 1 (AddComment)    |
-| 10 | list-memories    | MemoryManager  | ListMemories    | 1 (GetTicket)     |
+| #  | Tool                | Controller         | Method            | Tracker API calls      |
+|----|---------------------|--------------------|-------------------|------------------------|
+| 1  | list-metaplans      | PlanManager        | ListMetaPlans     | 1 (ListMetaPlans)      |
+| 2  | get-metaplan        | PlanManager        | GetMetaPlan       | 1 (GetMetaPlan)        |
+| 3  | create-metaplan     | PlanManager        | CreateMetaPlan    | 1 (CreateMetaPlan)     |
+| 4  | update-metaplan     | PlanManager        | UpdateMetaPlan    | 1 (UpdateMetaPlan)     |
+| 5  | delete-metaplan     | PlanManager        | DeleteMetaPlan    | 1 (DeleteMetaPlan)     |
+| 6  | list-plans          | PlanManager        | ListPlans         | 1 (ListPlans)          |
+| 7  | get-plan-state      | PlanManager        | GetPlanState      | 1 (GetPlan)            |
+| 8  | create-plan         | PlanManager        | CreatePlan        | 1 (CreatePlan)         |
+| 9  | update-plan         | PlanManager        | UpdatePlan        | 1 (UpdatePlan)         |
+| 10 | delete-plan         | PlanManager        | DeletePlan        | 1 (DeletePlan)         |
+| 11 | list-tasks          | PlanManager        | ListTasks         | 1 (ListTickets)        |
+| 12 | get-task            | PlanManager        | GetTask           | 1 (GetTicket)          |
+| 13 | create-task         | PlanManager        | CreateTask        | 1 (CreateTicket)       |
+| 14 | update-task         | PlanManager        | UpdateTask        | 1 (UpdateTicket)       |
+| 15 | delete-task         | PlanManager        | DeleteTask        | 1 (DeleteTicket)       |
+| 16 | assign-task         | PlanManager        | AssignTask        | 2 (Get + Update)       |
+| 17 | complete-task       | PlanManager        | CompleteTask      | 2 (Get + Update)       |
+| 18 | list-children       | PlanManager        | ListChildren      | 1 (GetChildren)        |
+| 19 | list-blocking       | PlanManager        | ListBlocking      | 1 (GetBlocking)        |
+| 20 | create-tracking-set | TrackingSetManager | CreateTrackingSet | 1 (CreateTrackingSet)  |
+| 21 | list-tracking-sets  | TrackingSetManager | ListTrackingSets  | 1 (ListTrackingSets)   |
+| 22 | get-tracking-set    | TrackingSetManager | GetTrackingSet    | 1 (GetTrackingSet)     |
+| 23 | delete-tracking-set | TrackingSetManager | DeleteTrackingSet | 1 (DeleteTrackingSet)  |
+| 24 | list-edges          | EdgeManager        | ListEdges         | 1 (ListEdges)          |
+| 25 | create-edge         | EdgeManager        | AddEdge           | 1 (AddEdge)            |
+| 26 | delete-edge         | EdgeManager        | RemoveEdge        | 1 (RemoveEdge)         |
+| 27 | add-comment         | MemoryManager      | AddComment        | 1 (AddComment)         |
+| 28 | list-memories       | MemoryManager      | ListMemories      | 1 (GetTicket)          |
 
 ### Package Catalog
 
@@ -225,11 +246,11 @@ extracts tags by finding the first `[...]` prefix. This avoids schema changes in
 | Package                            | Description                              |
 |------------------------------------|------------------------------------------|
 | `internal/adapter`                 | TrackerClient interface + HTTP impl      |
-| `internal/controller`              | PlanManager + MemoryManager logic        |
-| `internal/driver/mcp`              | 10 MCP tool registrations + input types  |
+| `internal/controller`              | PlanManager (19) + MemoryManager (2) + TrackingSetManager (4) + EdgeManager (3) |
+| `internal/driver/mcp`              | 28 MCP tool registrations + input types  |
 | `internal/types`                   | AgentContext, TaskAssignment, Memory      |
 | `internal/util/mocks/mockadapter`  | Generated mock for TrackerClient         |
-| `internal/util/mocks/mockcontroller` | Generated mocks for PlanManager, MemoryManager |
+| `internal/util/mocks/mockcontroller` | Generated mocks for PlanManager, MemoryManager, TrackingSetManager, EdgeManager |
 
 ### Adapter Interface
 
@@ -237,21 +258,48 @@ extracts tags by finding the first `[...]` prefix. This avoids schema changes in
 // internal/adapter/tracker.go
 
 type TrackerClient interface {
-    ListTrackingSets(ctx, ...)  ([]TrackingSet, error)
-    ListMetaPlans(ctx, ts)     ([]MetaPlan, error)
-    GetMetaPlan(ctx, ts, id)   (MetaPlan, error)
-    ListPlans(ctx, ts)         ([]Plan, error)
-    GetPlan(ctx, ts, id)       (Plan, error)
-    ListTickets(ctx, ts, filter) ([]Ticket, error)
-    GetTicket(ctx, ts, id)     (Ticket, error)
-    UpdateTicket(ctx, ts, id, req) (Ticket, error)
-    AddComment(ctx, ts, id, req)   (Comment, error)
-    GetChildren(ctx, ts, id)   ([]Ticket, error)
-    GetBlocking(ctx, ts, id)   ([]Ticket, error)
+    // Tracking sets (4 methods)
+    CreateTrackingSet(ctx, req)         (TrackingSet, error)
+    ListTrackingSets(ctx, ...)          ([]TrackingSet, error)
+    GetTrackingSet(ctx, name)           (TrackingSet, error)
+    DeleteTrackingSet(ctx, name)        error
+
+    // Meta-plans (5 methods)
+    ListMetaPlans(ctx, ts)             ([]MetaPlan, error)
+    GetMetaPlan(ctx, ts, id)           (MetaPlan, error)
+    CreateMetaPlan(ctx, ts, req)       (MetaPlan, error)
+    UpdateMetaPlan(ctx, ts, id, req)   (MetaPlan, error)
+    DeleteMetaPlan(ctx, ts, id)        error
+
+    // Plans (5 methods)
+    ListPlans(ctx, ts)                 ([]Plan, error)
+    GetPlan(ctx, ts, id)               (Plan, error)
+    CreatePlan(ctx, ts, req)           (Plan, error)
+    UpdatePlan(ctx, ts, id, req)       (Plan, error)
+    DeletePlan(ctx, ts, id)            error
+
+    // Tickets (5 methods)
+    ListTickets(ctx, ts, filter)       ([]Ticket, error)
+    GetTicket(ctx, ts, id)             (Ticket, error)
+    CreateTicket(ctx, ts, req)         (Ticket, error)
+    UpdateTicket(ctx, ts, id, req)     (Ticket, error)
+    DeleteTicket(ctx, ts, id)          error
+
+    // Graph queries (2 methods)
+    GetChildren(ctx, ts, id)           ([]Ticket, error)
+    GetBlocking(ctx, ts, id)           ([]Ticket, error)
+
+    // Edges (3 methods)
+    ListEdges(ctx, ts, filter)         ([]Edge, error)
+    AddEdge(ctx, ts, req)              (Edge, error)
+    RemoveEdge(ctx, ts, req)           error
+
+    // Comments (1 method)
+    AddComment(ctx, ts, id, req)       (Comment, error)
 }
 ```
 
-The interface has 11 methods. HTTPTrackerClient implements all 11 using the generated
+The interface has 25 methods. HTTPTrackerClient implements all 25 using the generated
 oapi-codegen client with response validation.
 
 ## Design Patterns
@@ -272,7 +320,7 @@ avoids extending the forge-tracker schema while giving agents a structured searc
 Agents could call forge-tracker REST API without an MCP intermediary. This was rejected because:
 MCP is the standard protocol for AI tool use. Direct HTTP calls require each agent framework to
 implement its own HTTP client, handle errors, and parse responses. forge-ai centralizes this in
-10 typed tools with consistent error handling.
+28 typed tools with consistent error handling.
 
 ### Embed state in forge-ai (local database)
 

@@ -33,6 +33,30 @@ type TrackerClient interface {
 	AddComment(ctx context.Context, ts, ticketID string, req tc.AddCommentRequest) (tc.Comment, error)
 	GetChildren(ctx context.Context, ts, ticketID string) ([]tc.Ticket, error)
 	GetBlocking(ctx context.Context, ts, ticketID string) ([]tc.Ticket, error)
+
+	// Tracking set CRUD
+	CreateTrackingSet(ctx context.Context, req tc.CreateTrackingSetRequest) (tc.TrackingSet, error)
+	GetTrackingSet(ctx context.Context, ts string) (tc.TrackingSet, error)
+	DeleteTrackingSet(ctx context.Context, ts string) error
+
+	// MetaPlan create/update/delete
+	CreateMetaPlan(ctx context.Context, ts string, req tc.CreateMetaPlanRequest) (tc.MetaPlan, error)
+	UpdateMetaPlan(ctx context.Context, ts, id string, req tc.UpdateMetaPlanRequest) (tc.MetaPlan, error)
+	DeleteMetaPlan(ctx context.Context, ts, id string) error
+
+	// Plan create/update/delete
+	CreatePlan(ctx context.Context, ts string, req tc.CreatePlanRequest) (tc.Plan, error)
+	UpdatePlan(ctx context.Context, ts, id string, req tc.UpdatePlanRequest) (tc.Plan, error)
+	DeletePlan(ctx context.Context, ts, id string) error
+
+	// Ticket create/delete (UpdateTicket already exists)
+	CreateTicket(ctx context.Context, ts string, req tc.CreateTicketRequest) (tc.Ticket, error)
+	DeleteTicket(ctx context.Context, ts, id string) error
+
+	// Edge CRUD
+	ListEdges(ctx context.Context, ts string, params *tc.ListEdgesParams) ([]tc.Edge, error)
+	AddEdge(ctx context.Context, ts string, req tc.EdgeRequest) (tc.Edge, error)
+	RemoveEdge(ctx context.Context, ts string, req tc.EdgeRequest) error
 }
 
 // TicketFilter holds optional query parameters for ListTickets.

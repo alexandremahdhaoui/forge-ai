@@ -99,17 +99,21 @@ forge-ai/
       main.go                 # Entry point: enginecli.Bootstrap
   internal/
     adapter/
-      tracker.go              # TrackerClient interface (11 methods)
+      tracker.go              # TrackerClient interface (25 methods)
       tracker_http.go         # HTTPTrackerClient implementation
       tracker_http_test.go    # Adapter unit tests
     controller/
-      plan_manager.go         # PlanManager (8 methods: plans, tasks)
+      plan_manager.go         # PlanManager (19 methods: plans, metaplans, tasks, graph queries)
       plan_manager_test.go    # PlanManager unit tests
       memory_manager.go       # MemoryManager (2 methods: comments)
       memory_manager_test.go  # MemoryManager unit tests
+      tracking_set_manager.go      # TrackingSetManager (4 methods: tracking sets)
+      tracking_set_manager_test.go # TrackingSetManager unit tests
+      edge_manager.go              # EdgeManager (3 methods: edges)
+      edge_manager_test.go         # EdgeManager unit tests
     driver/
       mcp/
-        tools.go              # 10 MCP tool registrations
+        tools.go              # 28 MCP tool registrations
         tools_test.go         # Driver unit tests
         input.go              # Input structs for tool parameters
     types/
@@ -139,9 +143,9 @@ forge-ai/
 
 | Package                | Description                                          |
 |------------------------|------------------------------------------------------|
-| `internal/adapter`     | TrackerClient interface + HTTPTrackerClient impl     |
-| `internal/controller`  | PlanManager (8 methods) + MemoryManager (2 methods)  |
-| `internal/driver/mcp`  | 10 MCP tool registrations and input type definitions |
+| `internal/adapter`     | TrackerClient interface (25 methods) + HTTPTrackerClient impl |
+| `internal/controller`  | PlanManager (19) + MemoryManager (2) + TrackingSetManager (4) + EdgeManager (3) |
+| `internal/driver/mcp`  | 28 MCP tool registrations and input type definitions |
 | `internal/types`       | Domain types: AgentContext, TaskAssignment, Memory    |
 | `internal/util/mocks`  | Generated mocks (mockery) for all interfaces         |
 

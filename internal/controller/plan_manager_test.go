@@ -169,3 +169,132 @@ func TestListMetaPlans_Error(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "connection refused")
 }
+
+// --- Create methods ---
+
+func TestCreateMetaPlan(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	req := tc.CreateMetaPlanRequest{Id: "mp1", Title: "Meta Plan 1"}
+	expected := tc.MetaPlan{Id: strPtr("mp1"), Title: strPtr("Meta Plan 1")}
+	mockClient.EXPECT().CreateMetaPlan(mock.Anything, "ts1", req).Return(expected, nil)
+
+	mgr := NewPlanManager(mockClient)
+	result, err := mgr.CreateMetaPlan(context.Background(), "ts1", req)
+	require.NoError(t, err)
+	assert.Equal(t, expected, result)
+}
+
+func TestCreatePlan(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	req := tc.CreatePlanRequest{Id: "p1", Title: "Plan 1"}
+	expected := tc.Plan{Id: strPtr("p1"), Title: strPtr("Plan 1")}
+	mockClient.EXPECT().CreatePlan(mock.Anything, "ts1", req).Return(expected, nil)
+
+	mgr := NewPlanManager(mockClient)
+	result, err := mgr.CreatePlan(context.Background(), "ts1", req)
+	require.NoError(t, err)
+	assert.Equal(t, expected, result)
+}
+
+func TestCreateTask(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	req := tc.CreateTicketRequest{Id: "task-1", Title: "Task 1"}
+	expected := tc.Ticket{Id: strPtr("task-1"), Title: strPtr("Task 1")}
+	mockClient.EXPECT().CreateTicket(mock.Anything, "ts1", req).Return(expected, nil)
+
+	mgr := NewPlanManager(mockClient)
+	result, err := mgr.CreateTask(context.Background(), "ts1", req)
+	require.NoError(t, err)
+	assert.Equal(t, expected, result)
+}
+
+// --- Update methods ---
+
+func TestUpdateMetaPlan(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	req := tc.UpdateMetaPlanRequest{Title: "Updated"}
+	expected := tc.MetaPlan{Id: strPtr("mp1"), Title: strPtr("Updated")}
+	mockClient.EXPECT().UpdateMetaPlan(mock.Anything, "ts1", "mp1", req).Return(expected, nil)
+
+	mgr := NewPlanManager(mockClient)
+	result, err := mgr.UpdateMetaPlan(context.Background(), "ts1", "mp1", req)
+	require.NoError(t, err)
+	assert.Equal(t, expected, result)
+}
+
+func TestUpdatePlan(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	req := tc.UpdatePlanRequest{Title: "Updated"}
+	expected := tc.Plan{Id: strPtr("p1"), Title: strPtr("Updated")}
+	mockClient.EXPECT().UpdatePlan(mock.Anything, "ts1", "p1", req).Return(expected, nil)
+
+	mgr := NewPlanManager(mockClient)
+	result, err := mgr.UpdatePlan(context.Background(), "ts1", "p1", req)
+	require.NoError(t, err)
+	assert.Equal(t, expected, result)
+}
+
+func TestUpdateTask(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	req := tc.UpdateTicketRequest{Title: "Updated Task"}
+	expected := tc.Ticket{Id: strPtr("task-1"), Title: strPtr("Updated Task")}
+	mockClient.EXPECT().UpdateTicket(mock.Anything, "ts1", "task-1", req).Return(expected, nil)
+
+	mgr := NewPlanManager(mockClient)
+	result, err := mgr.UpdateTask(context.Background(), "ts1", "task-1", req)
+	require.NoError(t, err)
+	assert.Equal(t, expected, result)
+}
+
+// --- Delete methods ---
+
+func TestDeleteMetaPlan(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	mockClient.EXPECT().DeleteMetaPlan(mock.Anything, "ts1", "mp1").Return(nil)
+
+	mgr := NewPlanManager(mockClient)
+	err := mgr.DeleteMetaPlan(context.Background(), "ts1", "mp1")
+	require.NoError(t, err)
+}
+
+func TestDeletePlan(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	mockClient.EXPECT().DeletePlan(mock.Anything, "ts1", "p1").Return(nil)
+
+	mgr := NewPlanManager(mockClient)
+	err := mgr.DeletePlan(context.Background(), "ts1", "p1")
+	require.NoError(t, err)
+}
+
+func TestDeleteTask(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	mockClient.EXPECT().DeleteTicket(mock.Anything, "ts1", "task-1").Return(nil)
+
+	mgr := NewPlanManager(mockClient)
+	err := mgr.DeleteTask(context.Background(), "ts1", "task-1")
+	require.NoError(t, err)
+}
+
+// --- Graph query methods ---
+
+func TestListChildren(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	expected := []tc.Ticket{{Id: strPtr("child-1")}}
+	mockClient.EXPECT().GetChildren(mock.Anything, "ts1", "t1").Return(expected, nil)
+
+	mgr := NewPlanManager(mockClient)
+	result, err := mgr.ListChildren(context.Background(), "ts1", "t1")
+	require.NoError(t, err)
+	assert.Equal(t, expected, result)
+}
+
+func TestListBlocking(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	expected := []tc.Ticket{{Id: strPtr("blocker-1")}}
+	mockClient.EXPECT().GetBlocking(mock.Anything, "ts1", "t1").Return(expected, nil)
+
+	mgr := NewPlanManager(mockClient)
+	result, err := mgr.ListBlocking(context.Background(), "ts1", "t1")
+	require.NoError(t, err)
+	assert.Equal(t, expected, result)
+}

@@ -32,6 +32,25 @@ type PlanManager interface {
 	GetTask(ctx context.Context, ts, id string) (tc.Ticket, error)
 	AssignTask(ctx context.Context, ts, ticketID, agentID string) (tc.Ticket, error)
 	CompleteTask(ctx context.Context, ts, ticketID string) (tc.Ticket, error)
+
+	// MetaPlan CRUD
+	CreateMetaPlan(ctx context.Context, ts string, req tc.CreateMetaPlanRequest) (tc.MetaPlan, error)
+	UpdateMetaPlan(ctx context.Context, ts, id string, req tc.UpdateMetaPlanRequest) (tc.MetaPlan, error)
+	DeleteMetaPlan(ctx context.Context, ts, id string) error
+
+	// Plan CRUD
+	CreatePlan(ctx context.Context, ts string, req tc.CreatePlanRequest) (tc.Plan, error)
+	UpdatePlan(ctx context.Context, ts, id string, req tc.UpdatePlanRequest) (tc.Plan, error)
+	DeletePlan(ctx context.Context, ts, id string) error
+
+	// Task/Ticket CRUD
+	CreateTask(ctx context.Context, ts string, req tc.CreateTicketRequest) (tc.Ticket, error)
+	UpdateTask(ctx context.Context, ts, id string, req tc.UpdateTicketRequest) (tc.Ticket, error)
+	DeleteTask(ctx context.Context, ts, id string) error
+
+	// Graph queries
+	ListChildren(ctx context.Context, ts, ticketID string) ([]tc.Ticket, error)
+	ListBlocking(ctx context.Context, ts, ticketID string) ([]tc.Ticket, error)
 }
 
 var _ PlanManager = (*planManager)(nil)
@@ -100,4 +119,56 @@ func (m *planManager) CompleteTask(ctx context.Context, ts, ticketID string) (tc
 		Title:  title,
 		Status: &status,
 	})
+}
+
+// --- MetaPlan CRUD ---
+
+func (m *planManager) CreateMetaPlan(ctx context.Context, ts string, req tc.CreateMetaPlanRequest) (tc.MetaPlan, error) {
+	return m.client.CreateMetaPlan(ctx, ts, req)
+}
+
+func (m *planManager) UpdateMetaPlan(ctx context.Context, ts, id string, req tc.UpdateMetaPlanRequest) (tc.MetaPlan, error) {
+	return m.client.UpdateMetaPlan(ctx, ts, id, req)
+}
+
+func (m *planManager) DeleteMetaPlan(ctx context.Context, ts, id string) error {
+	return m.client.DeleteMetaPlan(ctx, ts, id)
+}
+
+// --- Plan CRUD ---
+
+func (m *planManager) CreatePlan(ctx context.Context, ts string, req tc.CreatePlanRequest) (tc.Plan, error) {
+	return m.client.CreatePlan(ctx, ts, req)
+}
+
+func (m *planManager) UpdatePlan(ctx context.Context, ts, id string, req tc.UpdatePlanRequest) (tc.Plan, error) {
+	return m.client.UpdatePlan(ctx, ts, id, req)
+}
+
+func (m *planManager) DeletePlan(ctx context.Context, ts, id string) error {
+	return m.client.DeletePlan(ctx, ts, id)
+}
+
+// --- Task/Ticket CRUD ---
+
+func (m *planManager) CreateTask(ctx context.Context, ts string, req tc.CreateTicketRequest) (tc.Ticket, error) {
+	return m.client.CreateTicket(ctx, ts, req)
+}
+
+func (m *planManager) UpdateTask(ctx context.Context, ts, id string, req tc.UpdateTicketRequest) (tc.Ticket, error) {
+	return m.client.UpdateTicket(ctx, ts, id, req)
+}
+
+func (m *planManager) DeleteTask(ctx context.Context, ts, id string) error {
+	return m.client.DeleteTicket(ctx, ts, id)
+}
+
+// --- Graph queries ---
+
+func (m *planManager) ListChildren(ctx context.Context, ts, ticketID string) ([]tc.Ticket, error) {
+	return m.client.GetChildren(ctx, ts, ticketID)
+}
+
+func (m *planManager) ListBlocking(ctx context.Context, ts, ticketID string) ([]tc.Ticket, error) {
+	return m.client.GetBlocking(ctx, ts, ticketID)
 }

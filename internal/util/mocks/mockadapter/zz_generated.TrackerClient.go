@@ -117,6 +117,606 @@ func (_c *MockTrackerClient_AddComment_Call) RunAndReturn(run func(ctx context.C
 	return _c
 }
 
+// AddEdge provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) AddEdge(ctx context.Context, ts string, req trackerclient.EdgeRequest) (trackerclient.Edge, error) {
+	ret := _mock.Called(ctx, ts, req)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddEdge")
+	}
+
+	var r0 trackerclient.Edge
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.EdgeRequest) (trackerclient.Edge, error)); ok {
+		return returnFunc(ctx, ts, req)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.EdgeRequest) trackerclient.Edge); ok {
+		r0 = returnFunc(ctx, ts, req)
+	} else {
+		r0 = ret.Get(0).(trackerclient.Edge)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, trackerclient.EdgeRequest) error); ok {
+		r1 = returnFunc(ctx, ts, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_AddEdge_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddEdge'
+type MockTrackerClient_AddEdge_Call struct {
+	*mock.Call
+}
+
+// AddEdge is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - req trackerclient.EdgeRequest
+func (_e *MockTrackerClient_Expecter) AddEdge(ctx interface{}, ts interface{}, req interface{}) *MockTrackerClient_AddEdge_Call {
+	return &MockTrackerClient_AddEdge_Call{Call: _e.mock.On("AddEdge", ctx, ts, req)}
+}
+
+func (_c *MockTrackerClient_AddEdge_Call) Run(run func(ctx context.Context, ts string, req trackerclient.EdgeRequest)) *MockTrackerClient_AddEdge_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 trackerclient.EdgeRequest
+		if args[2] != nil {
+			arg2 = args[2].(trackerclient.EdgeRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_AddEdge_Call) Return(edge trackerclient.Edge, err error) *MockTrackerClient_AddEdge_Call {
+	_c.Call.Return(edge, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_AddEdge_Call) RunAndReturn(run func(ctx context.Context, ts string, req trackerclient.EdgeRequest) (trackerclient.Edge, error)) *MockTrackerClient_AddEdge_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateMetaPlan provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) CreateMetaPlan(ctx context.Context, ts string, req trackerclient.CreateMetaPlanRequest) (trackerclient.MetaPlan, error) {
+	ret := _mock.Called(ctx, ts, req)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateMetaPlan")
+	}
+
+	var r0 trackerclient.MetaPlan
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.CreateMetaPlanRequest) (trackerclient.MetaPlan, error)); ok {
+		return returnFunc(ctx, ts, req)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.CreateMetaPlanRequest) trackerclient.MetaPlan); ok {
+		r0 = returnFunc(ctx, ts, req)
+	} else {
+		r0 = ret.Get(0).(trackerclient.MetaPlan)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, trackerclient.CreateMetaPlanRequest) error); ok {
+		r1 = returnFunc(ctx, ts, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_CreateMetaPlan_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateMetaPlan'
+type MockTrackerClient_CreateMetaPlan_Call struct {
+	*mock.Call
+}
+
+// CreateMetaPlan is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - req trackerclient.CreateMetaPlanRequest
+func (_e *MockTrackerClient_Expecter) CreateMetaPlan(ctx interface{}, ts interface{}, req interface{}) *MockTrackerClient_CreateMetaPlan_Call {
+	return &MockTrackerClient_CreateMetaPlan_Call{Call: _e.mock.On("CreateMetaPlan", ctx, ts, req)}
+}
+
+func (_c *MockTrackerClient_CreateMetaPlan_Call) Run(run func(ctx context.Context, ts string, req trackerclient.CreateMetaPlanRequest)) *MockTrackerClient_CreateMetaPlan_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 trackerclient.CreateMetaPlanRequest
+		if args[2] != nil {
+			arg2 = args[2].(trackerclient.CreateMetaPlanRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_CreateMetaPlan_Call) Return(metaPlan trackerclient.MetaPlan, err error) *MockTrackerClient_CreateMetaPlan_Call {
+	_c.Call.Return(metaPlan, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_CreateMetaPlan_Call) RunAndReturn(run func(ctx context.Context, ts string, req trackerclient.CreateMetaPlanRequest) (trackerclient.MetaPlan, error)) *MockTrackerClient_CreateMetaPlan_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreatePlan provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) CreatePlan(ctx context.Context, ts string, req trackerclient.CreatePlanRequest) (trackerclient.Plan, error) {
+	ret := _mock.Called(ctx, ts, req)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreatePlan")
+	}
+
+	var r0 trackerclient.Plan
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.CreatePlanRequest) (trackerclient.Plan, error)); ok {
+		return returnFunc(ctx, ts, req)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.CreatePlanRequest) trackerclient.Plan); ok {
+		r0 = returnFunc(ctx, ts, req)
+	} else {
+		r0 = ret.Get(0).(trackerclient.Plan)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, trackerclient.CreatePlanRequest) error); ok {
+		r1 = returnFunc(ctx, ts, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_CreatePlan_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreatePlan'
+type MockTrackerClient_CreatePlan_Call struct {
+	*mock.Call
+}
+
+// CreatePlan is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - req trackerclient.CreatePlanRequest
+func (_e *MockTrackerClient_Expecter) CreatePlan(ctx interface{}, ts interface{}, req interface{}) *MockTrackerClient_CreatePlan_Call {
+	return &MockTrackerClient_CreatePlan_Call{Call: _e.mock.On("CreatePlan", ctx, ts, req)}
+}
+
+func (_c *MockTrackerClient_CreatePlan_Call) Run(run func(ctx context.Context, ts string, req trackerclient.CreatePlanRequest)) *MockTrackerClient_CreatePlan_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 trackerclient.CreatePlanRequest
+		if args[2] != nil {
+			arg2 = args[2].(trackerclient.CreatePlanRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_CreatePlan_Call) Return(plan trackerclient.Plan, err error) *MockTrackerClient_CreatePlan_Call {
+	_c.Call.Return(plan, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_CreatePlan_Call) RunAndReturn(run func(ctx context.Context, ts string, req trackerclient.CreatePlanRequest) (trackerclient.Plan, error)) *MockTrackerClient_CreatePlan_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateTicket provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) CreateTicket(ctx context.Context, ts string, req trackerclient.CreateTicketRequest) (trackerclient.Ticket, error) {
+	ret := _mock.Called(ctx, ts, req)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTicket")
+	}
+
+	var r0 trackerclient.Ticket
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.CreateTicketRequest) (trackerclient.Ticket, error)); ok {
+		return returnFunc(ctx, ts, req)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.CreateTicketRequest) trackerclient.Ticket); ok {
+		r0 = returnFunc(ctx, ts, req)
+	} else {
+		r0 = ret.Get(0).(trackerclient.Ticket)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, trackerclient.CreateTicketRequest) error); ok {
+		r1 = returnFunc(ctx, ts, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_CreateTicket_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTicket'
+type MockTrackerClient_CreateTicket_Call struct {
+	*mock.Call
+}
+
+// CreateTicket is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - req trackerclient.CreateTicketRequest
+func (_e *MockTrackerClient_Expecter) CreateTicket(ctx interface{}, ts interface{}, req interface{}) *MockTrackerClient_CreateTicket_Call {
+	return &MockTrackerClient_CreateTicket_Call{Call: _e.mock.On("CreateTicket", ctx, ts, req)}
+}
+
+func (_c *MockTrackerClient_CreateTicket_Call) Run(run func(ctx context.Context, ts string, req trackerclient.CreateTicketRequest)) *MockTrackerClient_CreateTicket_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 trackerclient.CreateTicketRequest
+		if args[2] != nil {
+			arg2 = args[2].(trackerclient.CreateTicketRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_CreateTicket_Call) Return(ticket trackerclient.Ticket, err error) *MockTrackerClient_CreateTicket_Call {
+	_c.Call.Return(ticket, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_CreateTicket_Call) RunAndReturn(run func(ctx context.Context, ts string, req trackerclient.CreateTicketRequest) (trackerclient.Ticket, error)) *MockTrackerClient_CreateTicket_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateTrackingSet provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) CreateTrackingSet(ctx context.Context, req trackerclient.CreateTrackingSetRequest) (trackerclient.TrackingSet, error) {
+	ret := _mock.Called(ctx, req)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTrackingSet")
+	}
+
+	var r0 trackerclient.TrackingSet
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, trackerclient.CreateTrackingSetRequest) (trackerclient.TrackingSet, error)); ok {
+		return returnFunc(ctx, req)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, trackerclient.CreateTrackingSetRequest) trackerclient.TrackingSet); ok {
+		r0 = returnFunc(ctx, req)
+	} else {
+		r0 = ret.Get(0).(trackerclient.TrackingSet)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, trackerclient.CreateTrackingSetRequest) error); ok {
+		r1 = returnFunc(ctx, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_CreateTrackingSet_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTrackingSet'
+type MockTrackerClient_CreateTrackingSet_Call struct {
+	*mock.Call
+}
+
+// CreateTrackingSet is a helper method to define mock.On call
+//   - ctx context.Context
+//   - req trackerclient.CreateTrackingSetRequest
+func (_e *MockTrackerClient_Expecter) CreateTrackingSet(ctx interface{}, req interface{}) *MockTrackerClient_CreateTrackingSet_Call {
+	return &MockTrackerClient_CreateTrackingSet_Call{Call: _e.mock.On("CreateTrackingSet", ctx, req)}
+}
+
+func (_c *MockTrackerClient_CreateTrackingSet_Call) Run(run func(ctx context.Context, req trackerclient.CreateTrackingSetRequest)) *MockTrackerClient_CreateTrackingSet_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 trackerclient.CreateTrackingSetRequest
+		if args[1] != nil {
+			arg1 = args[1].(trackerclient.CreateTrackingSetRequest)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_CreateTrackingSet_Call) Return(trackingSet trackerclient.TrackingSet, err error) *MockTrackerClient_CreateTrackingSet_Call {
+	_c.Call.Return(trackingSet, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_CreateTrackingSet_Call) RunAndReturn(run func(ctx context.Context, req trackerclient.CreateTrackingSetRequest) (trackerclient.TrackingSet, error)) *MockTrackerClient_CreateTrackingSet_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteMetaPlan provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) DeleteMetaPlan(ctx context.Context, ts string, id string) error {
+	ret := _mock.Called(ctx, ts, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteMetaPlan")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) error); ok {
+		r0 = returnFunc(ctx, ts, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockTrackerClient_DeleteMetaPlan_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteMetaPlan'
+type MockTrackerClient_DeleteMetaPlan_Call struct {
+	*mock.Call
+}
+
+// DeleteMetaPlan is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - id string
+func (_e *MockTrackerClient_Expecter) DeleteMetaPlan(ctx interface{}, ts interface{}, id interface{}) *MockTrackerClient_DeleteMetaPlan_Call {
+	return &MockTrackerClient_DeleteMetaPlan_Call{Call: _e.mock.On("DeleteMetaPlan", ctx, ts, id)}
+}
+
+func (_c *MockTrackerClient_DeleteMetaPlan_Call) Run(run func(ctx context.Context, ts string, id string)) *MockTrackerClient_DeleteMetaPlan_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_DeleteMetaPlan_Call) Return(err error) *MockTrackerClient_DeleteMetaPlan_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockTrackerClient_DeleteMetaPlan_Call) RunAndReturn(run func(ctx context.Context, ts string, id string) error) *MockTrackerClient_DeleteMetaPlan_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeletePlan provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) DeletePlan(ctx context.Context, ts string, id string) error {
+	ret := _mock.Called(ctx, ts, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeletePlan")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) error); ok {
+		r0 = returnFunc(ctx, ts, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockTrackerClient_DeletePlan_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeletePlan'
+type MockTrackerClient_DeletePlan_Call struct {
+	*mock.Call
+}
+
+// DeletePlan is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - id string
+func (_e *MockTrackerClient_Expecter) DeletePlan(ctx interface{}, ts interface{}, id interface{}) *MockTrackerClient_DeletePlan_Call {
+	return &MockTrackerClient_DeletePlan_Call{Call: _e.mock.On("DeletePlan", ctx, ts, id)}
+}
+
+func (_c *MockTrackerClient_DeletePlan_Call) Run(run func(ctx context.Context, ts string, id string)) *MockTrackerClient_DeletePlan_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_DeletePlan_Call) Return(err error) *MockTrackerClient_DeletePlan_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockTrackerClient_DeletePlan_Call) RunAndReturn(run func(ctx context.Context, ts string, id string) error) *MockTrackerClient_DeletePlan_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteTicket provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) DeleteTicket(ctx context.Context, ts string, id string) error {
+	ret := _mock.Called(ctx, ts, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteTicket")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) error); ok {
+		r0 = returnFunc(ctx, ts, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockTrackerClient_DeleteTicket_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteTicket'
+type MockTrackerClient_DeleteTicket_Call struct {
+	*mock.Call
+}
+
+// DeleteTicket is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - id string
+func (_e *MockTrackerClient_Expecter) DeleteTicket(ctx interface{}, ts interface{}, id interface{}) *MockTrackerClient_DeleteTicket_Call {
+	return &MockTrackerClient_DeleteTicket_Call{Call: _e.mock.On("DeleteTicket", ctx, ts, id)}
+}
+
+func (_c *MockTrackerClient_DeleteTicket_Call) Run(run func(ctx context.Context, ts string, id string)) *MockTrackerClient_DeleteTicket_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_DeleteTicket_Call) Return(err error) *MockTrackerClient_DeleteTicket_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockTrackerClient_DeleteTicket_Call) RunAndReturn(run func(ctx context.Context, ts string, id string) error) *MockTrackerClient_DeleteTicket_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteTrackingSet provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) DeleteTrackingSet(ctx context.Context, ts string) error {
+	ret := _mock.Called(ctx, ts)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteTrackingSet")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) error); ok {
+		r0 = returnFunc(ctx, ts)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockTrackerClient_DeleteTrackingSet_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteTrackingSet'
+type MockTrackerClient_DeleteTrackingSet_Call struct {
+	*mock.Call
+}
+
+// DeleteTrackingSet is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+func (_e *MockTrackerClient_Expecter) DeleteTrackingSet(ctx interface{}, ts interface{}) *MockTrackerClient_DeleteTrackingSet_Call {
+	return &MockTrackerClient_DeleteTrackingSet_Call{Call: _e.mock.On("DeleteTrackingSet", ctx, ts)}
+}
+
+func (_c *MockTrackerClient_DeleteTrackingSet_Call) Run(run func(ctx context.Context, ts string)) *MockTrackerClient_DeleteTrackingSet_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_DeleteTrackingSet_Call) Return(err error) *MockTrackerClient_DeleteTrackingSet_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockTrackerClient_DeleteTrackingSet_Call) RunAndReturn(run func(ctx context.Context, ts string) error) *MockTrackerClient_DeleteTrackingSet_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetBlocking provides a mock function for the type MockTrackerClient
 func (_mock *MockTrackerClient) GetBlocking(ctx context.Context, ts string, ticketID string) ([]trackerclient.Ticket, error) {
 	ret := _mock.Called(ctx, ts, ticketID)
@@ -481,6 +1081,146 @@ func (_c *MockTrackerClient_GetTicket_Call) RunAndReturn(run func(ctx context.Co
 	return _c
 }
 
+// GetTrackingSet provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) GetTrackingSet(ctx context.Context, ts string) (trackerclient.TrackingSet, error) {
+	ret := _mock.Called(ctx, ts)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrackingSet")
+	}
+
+	var r0 trackerclient.TrackingSet
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (trackerclient.TrackingSet, error)); ok {
+		return returnFunc(ctx, ts)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) trackerclient.TrackingSet); ok {
+		r0 = returnFunc(ctx, ts)
+	} else {
+		r0 = ret.Get(0).(trackerclient.TrackingSet)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = returnFunc(ctx, ts)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_GetTrackingSet_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrackingSet'
+type MockTrackerClient_GetTrackingSet_Call struct {
+	*mock.Call
+}
+
+// GetTrackingSet is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+func (_e *MockTrackerClient_Expecter) GetTrackingSet(ctx interface{}, ts interface{}) *MockTrackerClient_GetTrackingSet_Call {
+	return &MockTrackerClient_GetTrackingSet_Call{Call: _e.mock.On("GetTrackingSet", ctx, ts)}
+}
+
+func (_c *MockTrackerClient_GetTrackingSet_Call) Run(run func(ctx context.Context, ts string)) *MockTrackerClient_GetTrackingSet_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_GetTrackingSet_Call) Return(trackingSet trackerclient.TrackingSet, err error) *MockTrackerClient_GetTrackingSet_Call {
+	_c.Call.Return(trackingSet, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_GetTrackingSet_Call) RunAndReturn(run func(ctx context.Context, ts string) (trackerclient.TrackingSet, error)) *MockTrackerClient_GetTrackingSet_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// ListEdges provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) ListEdges(ctx context.Context, ts string, params *trackerclient.ListEdgesParams) ([]trackerclient.Edge, error) {
+	ret := _mock.Called(ctx, ts, params)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ListEdges")
+	}
+
+	var r0 []trackerclient.Edge
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, *trackerclient.ListEdgesParams) ([]trackerclient.Edge, error)); ok {
+		return returnFunc(ctx, ts, params)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, *trackerclient.ListEdgesParams) []trackerclient.Edge); ok {
+		r0 = returnFunc(ctx, ts, params)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]trackerclient.Edge)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, *trackerclient.ListEdgesParams) error); ok {
+		r1 = returnFunc(ctx, ts, params)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_ListEdges_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ListEdges'
+type MockTrackerClient_ListEdges_Call struct {
+	*mock.Call
+}
+
+// ListEdges is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - params *trackerclient.ListEdgesParams
+func (_e *MockTrackerClient_Expecter) ListEdges(ctx interface{}, ts interface{}, params interface{}) *MockTrackerClient_ListEdges_Call {
+	return &MockTrackerClient_ListEdges_Call{Call: _e.mock.On("ListEdges", ctx, ts, params)}
+}
+
+func (_c *MockTrackerClient_ListEdges_Call) Run(run func(ctx context.Context, ts string, params *trackerclient.ListEdgesParams)) *MockTrackerClient_ListEdges_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 *trackerclient.ListEdgesParams
+		if args[2] != nil {
+			arg2 = args[2].(*trackerclient.ListEdgesParams)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_ListEdges_Call) Return(edges []trackerclient.Edge, err error) *MockTrackerClient_ListEdges_Call {
+	_c.Call.Return(edges, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_ListEdges_Call) RunAndReturn(run func(ctx context.Context, ts string, params *trackerclient.ListEdgesParams) ([]trackerclient.Edge, error)) *MockTrackerClient_ListEdges_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // ListMetaPlans provides a mock function for the type MockTrackerClient
 func (_mock *MockTrackerClient) ListMetaPlans(ctx context.Context, ts string) ([]trackerclient.MetaPlan, error) {
 	ret := _mock.Called(ctx, ts)
@@ -749,6 +1489,225 @@ func (_c *MockTrackerClient_ListTrackingSets_Call) Return(trackingSets []tracker
 }
 
 func (_c *MockTrackerClient_ListTrackingSets_Call) RunAndReturn(run func(ctx context.Context) ([]trackerclient.TrackingSet, error)) *MockTrackerClient_ListTrackingSets_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// RemoveEdge provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) RemoveEdge(ctx context.Context, ts string, req trackerclient.EdgeRequest) error {
+	ret := _mock.Called(ctx, ts, req)
+
+	if len(ret) == 0 {
+		panic("no return value specified for RemoveEdge")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, trackerclient.EdgeRequest) error); ok {
+		r0 = returnFunc(ctx, ts, req)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockTrackerClient_RemoveEdge_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'RemoveEdge'
+type MockTrackerClient_RemoveEdge_Call struct {
+	*mock.Call
+}
+
+// RemoveEdge is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - req trackerclient.EdgeRequest
+func (_e *MockTrackerClient_Expecter) RemoveEdge(ctx interface{}, ts interface{}, req interface{}) *MockTrackerClient_RemoveEdge_Call {
+	return &MockTrackerClient_RemoveEdge_Call{Call: _e.mock.On("RemoveEdge", ctx, ts, req)}
+}
+
+func (_c *MockTrackerClient_RemoveEdge_Call) Run(run func(ctx context.Context, ts string, req trackerclient.EdgeRequest)) *MockTrackerClient_RemoveEdge_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 trackerclient.EdgeRequest
+		if args[2] != nil {
+			arg2 = args[2].(trackerclient.EdgeRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_RemoveEdge_Call) Return(err error) *MockTrackerClient_RemoveEdge_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockTrackerClient_RemoveEdge_Call) RunAndReturn(run func(ctx context.Context, ts string, req trackerclient.EdgeRequest) error) *MockTrackerClient_RemoveEdge_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateMetaPlan provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) UpdateMetaPlan(ctx context.Context, ts string, id string, req trackerclient.UpdateMetaPlanRequest) (trackerclient.MetaPlan, error) {
+	ret := _mock.Called(ctx, ts, id, req)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateMetaPlan")
+	}
+
+	var r0 trackerclient.MetaPlan
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, trackerclient.UpdateMetaPlanRequest) (trackerclient.MetaPlan, error)); ok {
+		return returnFunc(ctx, ts, id, req)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, trackerclient.UpdateMetaPlanRequest) trackerclient.MetaPlan); ok {
+		r0 = returnFunc(ctx, ts, id, req)
+	} else {
+		r0 = ret.Get(0).(trackerclient.MetaPlan)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, trackerclient.UpdateMetaPlanRequest) error); ok {
+		r1 = returnFunc(ctx, ts, id, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_UpdateMetaPlan_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateMetaPlan'
+type MockTrackerClient_UpdateMetaPlan_Call struct {
+	*mock.Call
+}
+
+// UpdateMetaPlan is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - id string
+//   - req trackerclient.UpdateMetaPlanRequest
+func (_e *MockTrackerClient_Expecter) UpdateMetaPlan(ctx interface{}, ts interface{}, id interface{}, req interface{}) *MockTrackerClient_UpdateMetaPlan_Call {
+	return &MockTrackerClient_UpdateMetaPlan_Call{Call: _e.mock.On("UpdateMetaPlan", ctx, ts, id, req)}
+}
+
+func (_c *MockTrackerClient_UpdateMetaPlan_Call) Run(run func(ctx context.Context, ts string, id string, req trackerclient.UpdateMetaPlanRequest)) *MockTrackerClient_UpdateMetaPlan_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 trackerclient.UpdateMetaPlanRequest
+		if args[3] != nil {
+			arg3 = args[3].(trackerclient.UpdateMetaPlanRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_UpdateMetaPlan_Call) Return(metaPlan trackerclient.MetaPlan, err error) *MockTrackerClient_UpdateMetaPlan_Call {
+	_c.Call.Return(metaPlan, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_UpdateMetaPlan_Call) RunAndReturn(run func(ctx context.Context, ts string, id string, req trackerclient.UpdateMetaPlanRequest) (trackerclient.MetaPlan, error)) *MockTrackerClient_UpdateMetaPlan_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdatePlan provides a mock function for the type MockTrackerClient
+func (_mock *MockTrackerClient) UpdatePlan(ctx context.Context, ts string, id string, req trackerclient.UpdatePlanRequest) (trackerclient.Plan, error) {
+	ret := _mock.Called(ctx, ts, id, req)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdatePlan")
+	}
+
+	var r0 trackerclient.Plan
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, trackerclient.UpdatePlanRequest) (trackerclient.Plan, error)); ok {
+		return returnFunc(ctx, ts, id, req)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, trackerclient.UpdatePlanRequest) trackerclient.Plan); ok {
+		r0 = returnFunc(ctx, ts, id, req)
+	} else {
+		r0 = ret.Get(0).(trackerclient.Plan)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, trackerclient.UpdatePlanRequest) error); ok {
+		r1 = returnFunc(ctx, ts, id, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockTrackerClient_UpdatePlan_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdatePlan'
+type MockTrackerClient_UpdatePlan_Call struct {
+	*mock.Call
+}
+
+// UpdatePlan is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ts string
+//   - id string
+//   - req trackerclient.UpdatePlanRequest
+func (_e *MockTrackerClient_Expecter) UpdatePlan(ctx interface{}, ts interface{}, id interface{}, req interface{}) *MockTrackerClient_UpdatePlan_Call {
+	return &MockTrackerClient_UpdatePlan_Call{Call: _e.mock.On("UpdatePlan", ctx, ts, id, req)}
+}
+
+func (_c *MockTrackerClient_UpdatePlan_Call) Run(run func(ctx context.Context, ts string, id string, req trackerclient.UpdatePlanRequest)) *MockTrackerClient_UpdatePlan_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 trackerclient.UpdatePlanRequest
+		if args[3] != nil {
+			arg3 = args[3].(trackerclient.UpdatePlanRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTrackerClient_UpdatePlan_Call) Return(plan trackerclient.Plan, err error) *MockTrackerClient_UpdatePlan_Call {
+	_c.Call.Return(plan, err)
+	return _c
+}
+
+func (_c *MockTrackerClient_UpdatePlan_Call) RunAndReturn(run func(ctx context.Context, ts string, id string, req trackerclient.UpdatePlanRequest) (trackerclient.Plan, error)) *MockTrackerClient_UpdatePlan_Call {
 	_c.Call.Return(run)
 	return _c
 }

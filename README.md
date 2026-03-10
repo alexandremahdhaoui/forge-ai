@@ -4,13 +4,13 @@
 
 > "I run 4 AI agents in parallel across 3 repositories. Each agent needs to claim tasks, report
 > progress, and read what other agents discovered. forge-ai gives them a shared task board and
-> memory system through 10 MCP tools, backed by forge-tracker."
+> memory system through 28 MCP tools, backed by forge-tracker."
 > -- An AI platform engineer
 
 ## What problem does forge-ai solve?
 
 AI agents that work on multi-step plans need a coordination layer. Without one, agents duplicate
-work, lose context between sessions, and cannot share findings. forge-ai exposes 10 MCP tools
+work, lose context between sessions, and cannot share findings. forge-ai exposes 28 MCP tools
 that let agents list plans, claim tasks, record progress, and read memories. It connects to
 forge-tracker over HTTP, so agents coordinate through a single source of truth. The result: agents
 stay aligned without custom glue code.
@@ -47,7 +47,7 @@ EOF
 +-------------+       +-------------------+       +-----------------+
 |  AI Agent   | stdio |    forge-ai       |  HTTP |  forge-tracker  |
 |  (Claude,   |------>|  MCP Server       |------>|  REST API       |
-|   GPT, ...) |<------| 10 tools          |<------| :8080           |
+|   GPT, ...) |<------| 28 tools          |<------| :8080           |
 +-------------+       +-------------------+       +-----------------+
                        |                   |
                        | mcp driver        |
@@ -57,8 +57,8 @@ EOF
 ```
 
 AI agents connect to forge-ai over stdio using the Model Context Protocol (MCP). forge-ai
-translates each tool call into HTTP requests against the forge-tracker REST API. Two controllers
-(PlanManager and MemoryManager) encapsulate business logic. The adapter layer abstracts the
+translates each tool call into HTTP requests against the forge-tracker REST API. Four controllers
+(PlanManager, MemoryManager, TrackingSetManager, EdgeManager) encapsulate business logic. The adapter layer abstracts the
 generated HTTP client. See [DESIGN.md](DESIGN.md) for full architecture details.
 
 ## Table of Contents
@@ -82,35 +82,73 @@ forge-tracker instance. No config file is required.
 
 ## What MCP tools are available?
 
-forge-ai exposes 10 MCP tools in 3 categories.
+forge-ai exposes 28 MCP tools in 7 categories.
 
-### Plan tools (4)
+### Meta-plan tools (5)
 
 | Tool              | Description                                      | Required params  |
 |-------------------|--------------------------------------------------|------------------|
 | `list-metaplans`  | List all meta-plans in a tracking set            | `ts`             |
 | `get-metaplan`    | Get meta-plan with stages, repos, checkpoints    | `ts`, `id`       |
+| `create-metaplan` | Create a new meta-plan                           | `ts`, `id`, `title` |
+| `update-metaplan` | Update an existing meta-plan                     | `ts`, `id`, `title` |
+| `delete-metaplan` | Delete a meta-plan by ID                         | `ts`, `id`       |
+
+### Plan tools (5)
+
+| Tool              | Description                                      | Required params  |
+|-------------------|--------------------------------------------------|------------------|
 | `list-plans`      | List all plans in a tracking set                 | `ts`             |
 | `get-plan-state`  | Get plan with resolved task statuses             | `ts`, `id`       |
+| `create-plan`     | Create a new plan                                | `ts`, `id`, `title` |
+| `update-plan`     | Update an existing plan                          | `ts`, `id`, `title` |
+| `delete-plan`     | Delete a plan by ID                              | `ts`, `id`       |
 
-### Task tools (4)
+### Task tools (7)
 
-| Tool              | Description                                      | Required params          |
-|-------------------|--------------------------------------------------|--------------------------|
-| `list-tasks`      | List tasks (optional: status, assignee filters)  | `ts`                     |
-| `get-task`        | Get task details with description and comments   | `ts`, `id`               |
+| Tool              | Description                                      | Required params             |
+|-------------------|--------------------------------------------------|-----------------------------|
+| `list-tasks`      | List tasks (optional: status, assignee filters)  | `ts`                        |
+| `get-task`        | Get task details with description and comments   | `ts`, `id`                  |
+| `create-task`     | Create a new task                                | `ts`, `id`, `title`         |
+| `update-task`     | Update an existing task                          | `ts`, `id`, `title`         |
+| `delete-task`     | Delete a task by ID                              | `ts`, `id`                  |
 | `assign-task`     | Assign task to agent, set status to `in_progress`| `ts`, `ticketId`, `agentId` |
-| `complete-task`   | Mark task as completed                           | `ts`, `ticketId`         |
+| `complete-task`   | Mark task as completed                           | `ts`, `ticketId`            |
+
+### Tracking set tools (4)
+
+| Tool                  | Description                      | Required params |
+|-----------------------|----------------------------------|-----------------|
+| `create-tracking-set` | Create a new tracking set        | `name`          |
+| `list-tracking-sets`  | List all tracking sets           | (none)          |
+| `get-tracking-set`    | Get a tracking set by name       | `ts`            |
+| `delete-tracking-set` | Delete a tracking set by name    | `ts`            |
+
+### Edge tools (3)
+
+| Tool              | Description                                      | Required params              |
+|-------------------|--------------------------------------------------|------------------------------|
+| `list-edges`      | List edges, optionally filtered by ticket or type| `ts`                         |
+| `create-edge`     | Create a relationship edge between two tickets   | `ts`, `from`, `to`, `type`   |
+| `delete-edge`     | Delete a relationship edge                       | `ts`, `from`, `to`, `type`   |
+
+### Graph query tools (2)
+
+| Tool              | Description                                      | Required params  |
+|-------------------|--------------------------------------------------|------------------|
+| `list-children`   | List child tickets of a given ticket             | `ts`, `id`       |
+| `list-blocking`   | List tickets that block a given ticket           | `ts`, `id`       |
 
 ### Memory tools (2)
 
-| Tool              | Description                                      | Required params          |
-|-------------------|--------------------------------------------------|--------------------------|
+| Tool              | Description                                      | Required params                    |
+|-------------------|--------------------------------------------------|------------------------------------|
 | `add-comment`     | Add tagged comment to a task                     | `ts`, `ticketId`, `text`, `author` |
-| `list-memories`   | List comments, optionally filtered by agent      | `ts`, `ticketId`         |
+| `list-memories`   | List comments, optionally filtered by agent      | `ts`, `ticketId`                   |
 
-All tools require the `ts` (tracking set) parameter. Tags in comments use the format
-`[tag1,tag2] comment text`.
+All tools require the `ts` (tracking set) parameter except `list-tracking-sets` and
+`create-tracking-set`. Tags in comments use the format `[tag1,tag2] comment text`.
 
 ## How do I build and test?
 

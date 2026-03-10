@@ -438,6 +438,421 @@ func TestAPIError_500(t *testing.T) {
 	}
 }
 
+func TestCreateTrackingSet(t *testing.T) {
+	expected := tc.TrackingSet{Name: strPtr("ts1")}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPost {
+			t.Errorf("expected POST method, got %s", r.Method)
+		}
+		var body tc.CreateTrackingSetRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decoding request body: %v", err)
+		}
+		if body.Name != "ts1" {
+			t.Errorf("expected name ts1, got %s", body.Name)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		writeJSON(t, w, expected)
+	}))
+	result, err := client.CreateTrackingSet(context.Background(), tc.CreateTrackingSetRequest{Name: "ts1"})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if *result.Name != "ts1" {
+		t.Errorf("expected ts1, got %s", *result.Name)
+	}
+}
+
+func TestGetTrackingSet(t *testing.T) {
+	expected := tc.TrackingSet{Name: strPtr("myts")}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodGet {
+			t.Errorf("unexpected method: %s", r.Method)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		writeJSON(t, w, expected)
+	}))
+	result, err := client.GetTrackingSet(context.Background(), "myts")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if *result.Name != "myts" {
+		t.Errorf("expected myts, got %s", *result.Name)
+	}
+}
+
+func TestDeleteTrackingSet(t *testing.T) {
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodDelete {
+			t.Errorf("expected DELETE method, got %s", r.Method)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	err := client.DeleteTrackingSet(context.Background(), "myts")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestCreateMetaPlan(t *testing.T) {
+	expected := tc.MetaPlan{Id: strPtr("mp1"), Title: strPtr("Meta Plan 1")}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/metaplans" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPost {
+			t.Errorf("expected POST method, got %s", r.Method)
+		}
+		var body tc.CreateMetaPlanRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decoding request body: %v", err)
+		}
+		if body.Id != "mp1" {
+			t.Errorf("expected id mp1, got %s", body.Id)
+		}
+		if body.Title != "Meta Plan 1" {
+			t.Errorf("expected title Meta Plan 1, got %s", body.Title)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		writeJSON(t, w, expected)
+	}))
+	result, err := client.CreateMetaPlan(context.Background(), "myts", tc.CreateMetaPlanRequest{
+		Id:    "mp1",
+		Title: "Meta Plan 1",
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if *result.Id != "mp1" {
+		t.Errorf("expected mp1, got %s", *result.Id)
+	}
+	if *result.Title != "Meta Plan 1" {
+		t.Errorf("expected Meta Plan 1, got %s", *result.Title)
+	}
+}
+
+func TestUpdateMetaPlan(t *testing.T) {
+	expected := tc.MetaPlan{Id: strPtr("mp1"), Title: strPtr("Updated")}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/metaplans/mp1" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPut {
+			t.Errorf("expected PUT method, got %s", r.Method)
+		}
+		var body tc.UpdateMetaPlanRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decoding request body: %v", err)
+		}
+		if body.Title != "Updated" {
+			t.Errorf("expected title Updated, got %s", body.Title)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		writeJSON(t, w, expected)
+	}))
+	result, err := client.UpdateMetaPlan(context.Background(), "myts", "mp1", tc.UpdateMetaPlanRequest{
+		Title: "Updated",
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if *result.Id != "mp1" {
+		t.Errorf("expected mp1, got %s", *result.Id)
+	}
+	if *result.Title != "Updated" {
+		t.Errorf("expected Updated, got %s", *result.Title)
+	}
+}
+
+func TestDeleteMetaPlan(t *testing.T) {
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/metaplans/mp1" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodDelete {
+			t.Errorf("expected DELETE method, got %s", r.Method)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	err := client.DeleteMetaPlan(context.Background(), "myts", "mp1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestCreatePlan(t *testing.T) {
+	expected := tc.Plan{Id: strPtr("p1"), Title: strPtr("Plan 1")}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/plans" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPost {
+			t.Errorf("expected POST method, got %s", r.Method)
+		}
+		var body tc.CreatePlanRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decoding request body: %v", err)
+		}
+		if body.Id != "p1" {
+			t.Errorf("expected id p1, got %s", body.Id)
+		}
+		if body.Title != "Plan 1" {
+			t.Errorf("expected title Plan 1, got %s", body.Title)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		writeJSON(t, w, expected)
+	}))
+	result, err := client.CreatePlan(context.Background(), "myts", tc.CreatePlanRequest{
+		Id:    "p1",
+		Title: "Plan 1",
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if *result.Id != "p1" {
+		t.Errorf("expected p1, got %s", *result.Id)
+	}
+	if *result.Title != "Plan 1" {
+		t.Errorf("expected Plan 1, got %s", *result.Title)
+	}
+}
+
+func TestUpdatePlan(t *testing.T) {
+	expected := tc.Plan{Id: strPtr("p1"), Title: strPtr("Updated")}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/plans/p1" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPut {
+			t.Errorf("expected PUT method, got %s", r.Method)
+		}
+		var body tc.UpdatePlanRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decoding request body: %v", err)
+		}
+		if body.Title != "Updated" {
+			t.Errorf("expected title Updated, got %s", body.Title)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		writeJSON(t, w, expected)
+	}))
+	result, err := client.UpdatePlan(context.Background(), "myts", "p1", tc.UpdatePlanRequest{
+		Title: "Updated",
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if *result.Id != "p1" {
+		t.Errorf("expected p1, got %s", *result.Id)
+	}
+	if *result.Title != "Updated" {
+		t.Errorf("expected Updated, got %s", *result.Title)
+	}
+}
+
+func TestDeletePlan(t *testing.T) {
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/plans/p1" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodDelete {
+			t.Errorf("expected DELETE method, got %s", r.Method)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	err := client.DeletePlan(context.Background(), "myts", "p1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestCreateTicket(t *testing.T) {
+	expected := tc.Ticket{Id: strPtr("t1"), Title: strPtr("Task 1")}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/tickets" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPost {
+			t.Errorf("expected POST method, got %s", r.Method)
+		}
+		var body tc.CreateTicketRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decoding request body: %v", err)
+		}
+		if body.Id != "t1" {
+			t.Errorf("expected id t1, got %s", body.Id)
+		}
+		if body.Title != "Task 1" {
+			t.Errorf("expected title Task 1, got %s", body.Title)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		writeJSON(t, w, expected)
+	}))
+	result, err := client.CreateTicket(context.Background(), "myts", tc.CreateTicketRequest{
+		Id:    "t1",
+		Title: "Task 1",
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if *result.Id != "t1" {
+		t.Errorf("expected t1, got %s", *result.Id)
+	}
+	if *result.Title != "Task 1" {
+		t.Errorf("expected Task 1, got %s", *result.Title)
+	}
+}
+
+func TestDeleteTicket(t *testing.T) {
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/tickets/t1" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodDelete {
+			t.Errorf("expected DELETE method, got %s", r.Method)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	err := client.DeleteTicket(context.Background(), "myts", "t1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestListEdges(t *testing.T) {
+	expected := []tc.Edge{
+		{From: strPtr("t1"), To: strPtr("t2"), Type: strPtr("blocks")},
+	}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/edges" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodGet {
+			t.Errorf("unexpected method: %s", r.Method)
+		}
+		if got := r.URL.Query().Get("ticket"); got != "t1" {
+			t.Errorf("expected ticket=t1, got %q", got)
+		}
+		if got := r.URL.Query().Get("type"); got != "blocks" {
+			t.Errorf("expected type=blocks, got %q", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		writeJSON(t, w, expected)
+	}))
+	ticket := "t1"
+	edgeType := "blocks"
+	result, err := client.ListEdges(context.Background(), "myts", &tc.ListEdgesParams{
+		Ticket: &ticket,
+		Type:   &edgeType,
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(result) != 1 {
+		t.Fatalf("expected 1 edge, got %d", len(result))
+	}
+	if *result[0].From != "t1" {
+		t.Errorf("expected from t1, got %s", *result[0].From)
+	}
+	if *result[0].To != "t2" {
+		t.Errorf("expected to t2, got %s", *result[0].To)
+	}
+	if *result[0].Type != "blocks" {
+		t.Errorf("expected type blocks, got %s", *result[0].Type)
+	}
+}
+
+func TestAddEdge(t *testing.T) {
+	expected := tc.Edge{From: strPtr("t1"), To: strPtr("t2"), Type: strPtr("blocks")}
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/edges" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPost {
+			t.Errorf("expected POST method, got %s", r.Method)
+		}
+		var body tc.EdgeRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decoding request body: %v", err)
+		}
+		if body.From != "t1" {
+			t.Errorf("expected from t1, got %s", body.From)
+		}
+		if body.To != "t2" {
+			t.Errorf("expected to t2, got %s", body.To)
+		}
+		if body.Type != "blocks" {
+			t.Errorf("expected type blocks, got %s", body.Type)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		writeJSON(t, w, expected)
+	}))
+	result, err := client.AddEdge(context.Background(), "myts", tc.EdgeRequest{
+		From: "t1",
+		To:   "t2",
+		Type: "blocks",
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if *result.From != "t1" {
+		t.Errorf("expected from t1, got %s", *result.From)
+	}
+	if *result.To != "t2" {
+		t.Errorf("expected to t2, got %s", *result.To)
+	}
+	if *result.Type != "blocks" {
+		t.Errorf("expected type blocks, got %s", *result.Type)
+	}
+}
+
+func TestRemoveEdge(t *testing.T) {
+	client := newTestClient(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v1/tracking-sets/myts/edges" {
+			t.Errorf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodDelete {
+			t.Errorf("expected DELETE method, got %s", r.Method)
+		}
+		var body tc.EdgeRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decoding request body: %v", err)
+		}
+		if body.From != "t1" {
+			t.Errorf("expected from t1, got %s", body.From)
+		}
+		if body.To != "t2" {
+			t.Errorf("expected to t2, got %s", body.To)
+		}
+		if body.Type != "blocks" {
+			t.Errorf("expected type blocks, got %s", body.Type)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	err := client.RemoveEdge(context.Background(), "myts", tc.EdgeRequest{
+		From: "t1",
+		To:   "t2",
+		Type: "blocks",
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
 func writeJSON(t *testing.T, w http.ResponseWriter, v any) {
 	t.Helper()
 	if err := json.NewEncoder(w).Encode(v); err != nil {

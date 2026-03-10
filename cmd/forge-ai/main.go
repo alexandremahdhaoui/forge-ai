@@ -51,9 +51,11 @@ func runMCPServer() func() error {
 
 		planMgr := controller.NewPlanManager(client)
 		memMgr := controller.NewMemoryManager(client)
+		tsMgr := controller.NewTrackingSetManager(client)
+		edgeMgr := controller.NewEdgeManager(client)
 
 		server := mcpserver.New("forge-ai", Version)
-		mcpdriver.RegisterTools(server, planMgr, memMgr)
+		mcpdriver.RegisterTools(server, planMgr, memMgr, tsMgr, edgeMgr)
 
 		return server.RunDefault()
 	}

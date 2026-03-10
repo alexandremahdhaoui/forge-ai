@@ -31,10 +31,12 @@ import (
 func TestRegisterTools(t *testing.T) {
 	mockPlanMgr := mockcontroller.NewMockPlanManager(t)
 	mockMemMgr := mockcontroller.NewMockMemoryManager(t)
+	mockTsMgr := mockcontroller.NewMockTrackingSetManager(t)
+	mockEdgeMgr := mockcontroller.NewMockEdgeManager(t)
 	server := mcpserver.New("test-forge-ai", "test")
 
 	require.NotPanics(t, func() {
-		RegisterTools(server, mockPlanMgr, mockMemMgr)
+		RegisterTools(server, mockPlanMgr, mockMemMgr, mockTsMgr, mockEdgeMgr)
 	})
 }
 
@@ -94,4 +96,16 @@ func TestErrResult(t *testing.T) {
 	assert.Equal(t, "test error", err.Error())
 	assert.Nil(t, result)
 	assert.Nil(t, extra)
+}
+
+func TestTextResult(t *testing.T) {
+	result, extra, err := textResult("deleted plan p1")
+	require.NoError(t, err)
+	require.Nil(t, extra)
+	require.NotNil(t, result)
+	require.Len(t, result.Content, 1)
+
+	tc, ok := result.Content[0].(*gomcp.TextContent)
+	require.True(t, ok, "expected *gomcp.TextContent, got %T", result.Content[0])
+	assert.Equal(t, "deleted plan p1", tc.Text)
 }

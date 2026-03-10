@@ -69,3 +69,140 @@ type listMemoriesInput struct {
 	TicketID string `json:"ticketId" jsonschema:"Ticket ID"`
 	AgentID  string `json:"agentId,omitempty" jsonschema:"Filter by agent ID"`
 }
+
+type createPlanInput struct {
+	TS          string             `json:"ts"          jsonschema:"Tracking set name"`
+	ID          string             `json:"id"          jsonschema:"Plan ID"`
+	Title       string             `json:"title"       jsonschema:"Plan title"`
+	Status      *string            `json:"status,omitempty"      jsonschema:"Plan status"`
+	Priority    *int               `json:"priority,omitempty"    jsonschema:"Priority (0=lowest)"`
+	Labels      *[]string          `json:"labels,omitempty"      jsonschema:"Labels"`
+	Annotations *map[string]string `json:"annotations,omitempty" jsonschema:"Key-value annotations"`
+	Assignee    *string            `json:"assignee,omitempty"    jsonschema:"Assignee"`
+	Description *string            `json:"description,omitempty" jsonschema:"Plan description"`
+	Tasks       *[]string          `json:"tasks,omitempty"       jsonschema:"Task IDs in this plan"`
+}
+
+type createTaskInput struct {
+	TS          string             `json:"ts"          jsonschema:"Tracking set name"`
+	ID          string             `json:"id"          jsonschema:"Task ID"`
+	Title       string             `json:"title"       jsonschema:"Task title"`
+	Status      *string            `json:"status,omitempty"      jsonschema:"Task status"`
+	Priority    *int               `json:"priority,omitempty"    jsonschema:"Priority (0=lowest)"`
+	Labels      *[]string          `json:"labels,omitempty"      jsonschema:"Labels"`
+	Annotations *map[string]string `json:"annotations,omitempty" jsonschema:"Key-value annotations"`
+	Assignee    *string            `json:"assignee,omitempty"    jsonschema:"Assignee"`
+	Description *string            `json:"description,omitempty" jsonschema:"Task description"`
+}
+
+type createMetaPlanInput struct {
+	TS          string             `json:"ts"          jsonschema:"Tracking set name"`
+	ID          string             `json:"id"          jsonschema:"Meta-plan ID"`
+	Title       string             `json:"title"       jsonschema:"Meta-plan title"`
+	Status      *string            `json:"status,omitempty"      jsonschema:"Meta-plan status"`
+	Priority    *int               `json:"priority,omitempty"    jsonschema:"Priority (0=lowest)"`
+	Labels      *[]string          `json:"labels,omitempty"      jsonschema:"Labels"`
+	Annotations *map[string]string `json:"annotations,omitempty" jsonschema:"Key-value annotations"`
+	Assignee    *string            `json:"assignee,omitempty"    jsonschema:"Assignee"`
+	Description *string            `json:"description,omitempty" jsonschema:"Meta-plan description"`
+}
+
+type updatePlanInput struct {
+	TS          string             `json:"ts"          jsonschema:"Tracking set name"`
+	ID          string             `json:"id"          jsonschema:"Plan ID"`
+	Title       string             `json:"title"       jsonschema:"Plan title (required)"`
+	Status      *string            `json:"status,omitempty"      jsonschema:"Plan status"`
+	Priority    *int               `json:"priority,omitempty"    jsonschema:"Priority (0=lowest)"`
+	Labels      *[]string          `json:"labels,omitempty"      jsonschema:"Labels"`
+	Annotations *map[string]string `json:"annotations,omitempty" jsonschema:"Key-value annotations"`
+	Assignee    *string            `json:"assignee,omitempty"    jsonschema:"Assignee"`
+	Description *string            `json:"description,omitempty" jsonschema:"Plan description"`
+	Tasks       *[]string          `json:"tasks,omitempty"       jsonschema:"Task IDs in this plan"`
+}
+
+type updateMetaPlanInput struct {
+	TS          string             `json:"ts"          jsonschema:"Tracking set name"`
+	ID          string             `json:"id"          jsonschema:"Meta-plan ID"`
+	Title       string             `json:"title"       jsonschema:"Meta-plan title (required)"`
+	Status      *string            `json:"status,omitempty"      jsonschema:"Meta-plan status"`
+	Priority    *int               `json:"priority,omitempty"    jsonschema:"Priority (0=lowest)"`
+	Labels      *[]string          `json:"labels,omitempty"      jsonschema:"Labels"`
+	Annotations *map[string]string `json:"annotations,omitempty" jsonschema:"Key-value annotations"`
+	Assignee    *string            `json:"assignee,omitempty"    jsonschema:"Assignee"`
+	Description *string            `json:"description,omitempty" jsonschema:"Meta-plan description"`
+}
+
+type updateTaskInput struct {
+	TS          string             `json:"ts"          jsonschema:"Tracking set name"`
+	ID          string             `json:"id"          jsonschema:"Task ID"`
+	Title       string             `json:"title"       jsonschema:"Task title (required)"`
+	Status      *string            `json:"status,omitempty"      jsonschema:"Task status"`
+	Priority    *int               `json:"priority,omitempty"    jsonschema:"Priority (0=lowest)"`
+	Labels      *[]string          `json:"labels,omitempty"      jsonschema:"Labels"`
+	Annotations *map[string]string `json:"annotations,omitempty" jsonschema:"Key-value annotations"`
+	Assignee    *string            `json:"assignee,omitempty"    jsonschema:"Assignee"`
+	Description *string            `json:"description,omitempty" jsonschema:"Task description"`
+}
+
+type createEdgeInput struct {
+	TS   string `json:"ts"   jsonschema:"Tracking set name"`
+	From string `json:"from" jsonschema:"Source ticket ID"`
+	To   string `json:"to"   jsonschema:"Target ticket ID"`
+	Type string `json:"type" jsonschema:"Edge type: parent, blocks, or relates-to"`
+}
+
+type listEdgesInput struct {
+	TS     string  `json:"ts"     jsonschema:"Tracking set name"`
+	Ticket *string `json:"ticket,omitempty" jsonschema:"Filter by ticket ID (from or to)"`
+	Type   *string `json:"type,omitempty"   jsonschema:"Filter by edge type"`
+}
+
+// P2 input structs
+
+type deletePlanInput struct {
+	TS string `json:"ts" jsonschema:"Tracking set name"`
+	ID string `json:"id" jsonschema:"Plan ID"`
+}
+
+type deleteTaskInput struct {
+	TS string `json:"ts" jsonschema:"Tracking set name"`
+	ID string `json:"id" jsonschema:"Task ID"`
+}
+
+type deleteMetaPlanInput struct {
+	TS string `json:"ts" jsonschema:"Tracking set name"`
+	ID string `json:"id" jsonschema:"Meta-plan ID"`
+}
+
+type deleteEdgeInput struct {
+	TS   string `json:"ts"   jsonschema:"Tracking set name"`
+	From string `json:"from" jsonschema:"Source ticket ID"`
+	To   string `json:"to"   jsonschema:"Target ticket ID"`
+	Type string `json:"type" jsonschema:"Edge type: parent, blocks, or relates-to"`
+}
+
+type createTrackingSetInput struct {
+	Name string `json:"name" jsonschema:"Tracking set name"`
+}
+
+type listTrackingSetsInput struct{}
+
+type getTrackingSetInput struct {
+	TS string `json:"ts" jsonschema:"Tracking set name"`
+}
+
+type deleteTrackingSetInput struct {
+	TS string `json:"ts" jsonschema:"Tracking set name"`
+}
+
+// P3 input structs
+
+type listChildrenInput struct {
+	TS string `json:"ts" jsonschema:"Tracking set name"`
+	ID string `json:"id" jsonschema:"Ticket ID"`
+}
+
+type listBlockingInput struct {
+	TS string `json:"ts" jsonschema:"Tracking set name"`
+	ID string `json:"id" jsonschema:"Ticket ID"`
+}

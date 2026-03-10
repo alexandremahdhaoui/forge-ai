@@ -17,6 +17,7 @@ package adapter
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"strings"
 
 	tc "github.com/alexandremahdhaoui/forge-ai/pkg/generated/trackerclient"
@@ -171,6 +172,160 @@ func (c *HTTPTrackerClient) GetBlocking(ctx context.Context, ts, ticketID string
 		return nil, apiError("getting blocking", resp.StatusCode(), resp.Body)
 	}
 	return *resp.JSON200, nil
+}
+
+func (c *HTTPTrackerClient) CreateTrackingSet(ctx context.Context, req tc.CreateTrackingSetRequest) (tc.TrackingSet, error) {
+	resp, err := c.client.CreateTrackingSetWithResponse(ctx, tc.CreateTrackingSetJSONRequestBody(req))
+	if err != nil {
+		return tc.TrackingSet{}, fmt.Errorf("creating tracking set: %w", err)
+	}
+	if resp.JSON201 == nil {
+		return tc.TrackingSet{}, apiError("creating tracking set", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON201, nil
+}
+
+func (c *HTTPTrackerClient) GetTrackingSet(ctx context.Context, ts string) (tc.TrackingSet, error) {
+	resp, err := c.client.GetTrackingSetWithResponse(ctx, ts)
+	if err != nil {
+		return tc.TrackingSet{}, fmt.Errorf("getting tracking set: %w", err)
+	}
+	if resp.JSON200 == nil {
+		return tc.TrackingSet{}, apiError("getting tracking set", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON200, nil
+}
+
+func (c *HTTPTrackerClient) DeleteTrackingSet(ctx context.Context, ts string) error {
+	resp, err := c.client.DeleteTrackingSetWithResponse(ctx, ts)
+	if err != nil {
+		return fmt.Errorf("deleting tracking set: %w", err)
+	}
+	if resp.StatusCode() != http.StatusNoContent {
+		return apiError("deleting tracking set", resp.StatusCode(), resp.Body)
+	}
+	return nil
+}
+
+func (c *HTTPTrackerClient) CreateMetaPlan(ctx context.Context, ts string, req tc.CreateMetaPlanRequest) (tc.MetaPlan, error) {
+	resp, err := c.client.CreateMetaPlanWithResponse(ctx, ts, tc.CreateMetaPlanJSONRequestBody(req))
+	if err != nil {
+		return tc.MetaPlan{}, fmt.Errorf("creating meta-plan: %w", err)
+	}
+	if resp.JSON201 == nil {
+		return tc.MetaPlan{}, apiError("creating meta-plan", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON201, nil
+}
+
+func (c *HTTPTrackerClient) UpdateMetaPlan(ctx context.Context, ts, id string, req tc.UpdateMetaPlanRequest) (tc.MetaPlan, error) {
+	resp, err := c.client.UpdateMetaPlanWithResponse(ctx, ts, id, tc.UpdateMetaPlanJSONRequestBody(req))
+	if err != nil {
+		return tc.MetaPlan{}, fmt.Errorf("updating meta-plan: %w", err)
+	}
+	if resp.JSON200 == nil {
+		return tc.MetaPlan{}, apiError("updating meta-plan", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON200, nil
+}
+
+func (c *HTTPTrackerClient) DeleteMetaPlan(ctx context.Context, ts, id string) error {
+	resp, err := c.client.DeleteMetaPlanWithResponse(ctx, ts, id)
+	if err != nil {
+		return fmt.Errorf("deleting meta-plan: %w", err)
+	}
+	if resp.StatusCode() != http.StatusNoContent {
+		return apiError("deleting meta-plan", resp.StatusCode(), resp.Body)
+	}
+	return nil
+}
+
+func (c *HTTPTrackerClient) CreatePlan(ctx context.Context, ts string, req tc.CreatePlanRequest) (tc.Plan, error) {
+	resp, err := c.client.CreatePlanWithResponse(ctx, ts, tc.CreatePlanJSONRequestBody(req))
+	if err != nil {
+		return tc.Plan{}, fmt.Errorf("creating plan: %w", err)
+	}
+	if resp.JSON201 == nil {
+		return tc.Plan{}, apiError("creating plan", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON201, nil
+}
+
+func (c *HTTPTrackerClient) UpdatePlan(ctx context.Context, ts, id string, req tc.UpdatePlanRequest) (tc.Plan, error) {
+	resp, err := c.client.UpdatePlanWithResponse(ctx, ts, id, tc.UpdatePlanJSONRequestBody(req))
+	if err != nil {
+		return tc.Plan{}, fmt.Errorf("updating plan: %w", err)
+	}
+	if resp.JSON200 == nil {
+		return tc.Plan{}, apiError("updating plan", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON200, nil
+}
+
+func (c *HTTPTrackerClient) DeletePlan(ctx context.Context, ts, id string) error {
+	resp, err := c.client.DeletePlanWithResponse(ctx, ts, id)
+	if err != nil {
+		return fmt.Errorf("deleting plan: %w", err)
+	}
+	if resp.StatusCode() != http.StatusNoContent {
+		return apiError("deleting plan", resp.StatusCode(), resp.Body)
+	}
+	return nil
+}
+
+func (c *HTTPTrackerClient) CreateTicket(ctx context.Context, ts string, req tc.CreateTicketRequest) (tc.Ticket, error) {
+	resp, err := c.client.CreateTicketWithResponse(ctx, ts, tc.CreateTicketJSONRequestBody(req))
+	if err != nil {
+		return tc.Ticket{}, fmt.Errorf("creating ticket: %w", err)
+	}
+	if resp.JSON201 == nil {
+		return tc.Ticket{}, apiError("creating ticket", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON201, nil
+}
+
+func (c *HTTPTrackerClient) DeleteTicket(ctx context.Context, ts, id string) error {
+	resp, err := c.client.DeleteTicketWithResponse(ctx, ts, id)
+	if err != nil {
+		return fmt.Errorf("deleting ticket: %w", err)
+	}
+	if resp.StatusCode() != http.StatusNoContent {
+		return apiError("deleting ticket", resp.StatusCode(), resp.Body)
+	}
+	return nil
+}
+
+func (c *HTTPTrackerClient) ListEdges(ctx context.Context, ts string, params *tc.ListEdgesParams) ([]tc.Edge, error) {
+	resp, err := c.client.ListEdgesWithResponse(ctx, ts, params)
+	if err != nil {
+		return nil, fmt.Errorf("listing edges: %w", err)
+	}
+	if resp.JSON200 == nil {
+		return nil, apiError("listing edges", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON200, nil
+}
+
+func (c *HTTPTrackerClient) AddEdge(ctx context.Context, ts string, req tc.EdgeRequest) (tc.Edge, error) {
+	resp, err := c.client.AddEdgeWithResponse(ctx, ts, tc.AddEdgeJSONRequestBody(req))
+	if err != nil {
+		return tc.Edge{}, fmt.Errorf("adding edge: %w", err)
+	}
+	if resp.JSON201 == nil {
+		return tc.Edge{}, apiError("adding edge", resp.StatusCode(), resp.Body)
+	}
+	return *resp.JSON201, nil
+}
+
+func (c *HTTPTrackerClient) RemoveEdge(ctx context.Context, ts string, req tc.EdgeRequest) error {
+	resp, err := c.client.RemoveEdgeWithResponse(ctx, ts, tc.RemoveEdgeJSONRequestBody(req))
+	if err != nil {
+		return fmt.Errorf("removing edge: %w", err)
+	}
+	if resp.StatusCode() != http.StatusNoContent {
+		return apiError("removing edge", resp.StatusCode(), resp.Body)
+	}
+	return nil
 }
 
 func apiError(operation string, statusCode int, body []byte) error {
