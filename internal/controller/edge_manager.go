@@ -21,13 +21,6 @@ import (
 	tc "github.com/alexandremahdhaoui/forge-ai/pkg/generated/trackerclient"
 )
 
-// EdgeManager handles edge (relationship) operations between tickets.
-type EdgeManager interface {
-	ListEdges(ctx context.Context, ts string, params *tc.ListEdgesParams) ([]tc.Edge, error)
-	AddEdge(ctx context.Context, ts string, req tc.EdgeRequest) (tc.Edge, error)
-	RemoveEdge(ctx context.Context, ts string, req tc.EdgeRequest) error
-}
-
 var _ EdgeManager = (*edgeManager)(nil)
 
 type edgeManager struct {

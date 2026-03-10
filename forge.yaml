@@ -3,6 +3,8 @@ name: forge-ai
 envFile: .envrc
 artifactStorePath: .forge/artifact-store.yaml
 
+# NOTE: Multi-engine aliases trigger config-validate errors ("cannot be resolved to single engine").
+# This is a known forge config-validate limitation. The aliases work correctly at runtime.
 engines:
   - alias: go-gen-openapi-with-license
     type: builder
@@ -38,6 +40,7 @@ build:
     src: .
     engine: alias://generate-mocks
 
+  # go-build uses forge's artifact store for lazy rebuilds; dependsOn is not needed.
   - name: forge-ai
     src: ./cmd/forge-ai
     dest: ./build/bin
@@ -54,4 +57,7 @@ test:
     runner: go://go-lint
 
   - name: unit
+    runner: go://go-test
+
+  - name: integration
     runner: go://go-test

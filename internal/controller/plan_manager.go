@@ -22,37 +22,6 @@ import (
 	tc "github.com/alexandremahdhaoui/forge-ai/pkg/generated/trackerclient"
 )
 
-// PlanManager handles plan, meta-plan, and task operations.
-type PlanManager interface {
-	ListMetaPlans(ctx context.Context, ts string) ([]tc.MetaPlan, error)
-	GetMetaPlan(ctx context.Context, ts, id string) (tc.MetaPlan, error)
-	ListPlans(ctx context.Context, ts string) ([]tc.Plan, error)
-	GetPlanState(ctx context.Context, ts, id string) (tc.Plan, error)
-	ListTasks(ctx context.Context, ts string, filter adapter.TicketFilter) ([]tc.Ticket, error)
-	GetTask(ctx context.Context, ts, id string) (tc.Ticket, error)
-	AssignTask(ctx context.Context, ts, ticketID, agentID string) (tc.Ticket, error)
-	CompleteTask(ctx context.Context, ts, ticketID string) (tc.Ticket, error)
-
-	// MetaPlan CRUD
-	CreateMetaPlan(ctx context.Context, ts string, req tc.CreateMetaPlanRequest) (tc.MetaPlan, error)
-	UpdateMetaPlan(ctx context.Context, ts, id string, req tc.UpdateMetaPlanRequest) (tc.MetaPlan, error)
-	DeleteMetaPlan(ctx context.Context, ts, id string) error
-
-	// Plan CRUD
-	CreatePlan(ctx context.Context, ts string, req tc.CreatePlanRequest) (tc.Plan, error)
-	UpdatePlan(ctx context.Context, ts, id string, req tc.UpdatePlanRequest) (tc.Plan, error)
-	DeletePlan(ctx context.Context, ts, id string) error
-
-	// Task/Ticket CRUD
-	CreateTask(ctx context.Context, ts string, req tc.CreateTicketRequest) (tc.Ticket, error)
-	UpdateTask(ctx context.Context, ts, id string, req tc.UpdateTicketRequest) (tc.Ticket, error)
-	DeleteTask(ctx context.Context, ts, id string) error
-
-	// Graph queries
-	ListChildren(ctx context.Context, ts, ticketID string) ([]tc.Ticket, error)
-	ListBlocking(ctx context.Context, ts, ticketID string) ([]tc.Ticket, error)
-}
-
 var _ PlanManager = (*planManager)(nil)
 
 type planManager struct {

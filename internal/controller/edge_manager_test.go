@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"github.com/alexandremahdhaoui/forge-ai/internal/util/mocks/mockadapter"
@@ -59,4 +60,16 @@ func TestRemoveEdge(t *testing.T) {
 	mgr := NewEdgeManager(mockClient)
 	err := mgr.RemoveEdge(context.Background(), "ts1", req)
 	require.NoError(t, err)
+}
+
+func TestAddEdge_Error(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	req := tc.EdgeRequest{From: "t1", To: "t2", Type: "blocks"}
+	mockClient.EXPECT().AddEdge(mock.Anything, "ts1", req).
+		Return(tc.Edge{}, errors.New("internal server error"))
+
+	mgr := NewEdgeManager(mockClient)
+	_, err := mgr.AddEdge(context.Background(), "ts1", req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "internal server error")
 }

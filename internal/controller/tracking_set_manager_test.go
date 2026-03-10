@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"github.com/alexandremahdhaoui/forge-ai/internal/util/mocks/mockadapter"
@@ -67,4 +68,15 @@ func TestDeleteTrackingSet(t *testing.T) {
 	mgr := NewTrackingSetManager(mockClient)
 	err := mgr.DeleteTrackingSet(context.Background(), "ts1")
 	require.NoError(t, err)
+}
+
+func TestCreateTrackingSet_Error(t *testing.T) {
+	mockClient := mockadapter.NewMockTrackerClient(t)
+	mockClient.EXPECT().CreateTrackingSet(mock.Anything, tc.CreateTrackingSetRequest{Name: "ts1"}).
+		Return(tc.TrackingSet{}, errors.New("connection refused"))
+
+	mgr := NewTrackingSetManager(mockClient)
+	_, err := mgr.CreateTrackingSet(context.Background(), "ts1")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "connection refused")
 }

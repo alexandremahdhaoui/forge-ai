@@ -21,14 +21,6 @@ import (
 	tc "github.com/alexandremahdhaoui/forge-ai/pkg/generated/trackerclient"
 )
 
-// TrackingSetManager handles tracking set operations.
-type TrackingSetManager interface {
-	CreateTrackingSet(ctx context.Context, name string) (tc.TrackingSet, error)
-	ListTrackingSets(ctx context.Context) ([]tc.TrackingSet, error)
-	GetTrackingSet(ctx context.Context, ts string) (tc.TrackingSet, error)
-	DeleteTrackingSet(ctx context.Context, ts string) error
-}
-
 var _ TrackingSetManager = (*trackingSetManager)(nil)
 
 type trackingSetManager struct {

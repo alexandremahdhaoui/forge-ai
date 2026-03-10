@@ -24,12 +24,6 @@ import (
 	tc "github.com/alexandremahdhaoui/forge-ai/pkg/generated/trackerclient"
 )
 
-// MemoryManager handles comment/memory operations.
-type MemoryManager interface {
-	AddComment(ctx context.Context, ts, ticketID, author, text string, tags []string) (tc.Comment, error)
-	ListMemories(ctx context.Context, ts, ticketID, agentID string) ([]types.Memory, error)
-}
-
 var _ MemoryManager = (*memoryManager)(nil)
 
 type memoryManager struct {

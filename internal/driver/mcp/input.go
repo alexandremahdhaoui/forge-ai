@@ -157,7 +157,7 @@ type listEdgesInput struct {
 	Type   *string `json:"type,omitempty"   jsonschema:"Filter by edge type"`
 }
 
-// P2 input structs
+// Delete input structs
 
 type deletePlanInput struct {
 	TS string `json:"ts" jsonschema:"Tracking set name"`
@@ -195,7 +195,7 @@ type deleteTrackingSetInput struct {
 	TS string `json:"ts" jsonschema:"Tracking set name"`
 }
 
-// P3 input structs
+// Graph query input structs
 
 type listChildrenInput struct {
 	TS string `json:"ts" jsonschema:"Tracking set name"`

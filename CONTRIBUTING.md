@@ -65,10 +65,10 @@ Every commit requires `Signed-off-by`. Use `git commit -s` to add it automatical
 
 ## How do I run tests?
 
-forge-ai has 4 test stages. Run them individually or all at once.
+forge-ai has 5 test stages. Run them individually or all at once.
 
 ```bash
-# Run all stages (build + lint-tags + lint-licenses + lint + unit)
+# Run all stages (build + lint-tags + lint-licenses + lint + unit + integration)
 forge test-all
 
 # Run individual stages
@@ -76,6 +76,7 @@ forge test run lint-tags        # verify //go:build tags on test files
 forge test run lint-licenses    # verify Apache 2.0 headers
 forge test run lint             # golangci-lint static analysis
 forge test run unit             # go test -tags unit ./...
+forge test run integration      # contract tests: validates generated client matches OpenAPI spec
 ```
 
 To regenerate mocks after changing interfaces:
@@ -185,7 +186,7 @@ Files prefixed with `zz_generated.` are auto-generated. Do not edit them manuall
 
 | Dependency              | Version  | Purpose                        |
 |-------------------------|----------|--------------------------------|
-| forge                   | v0.38.0  | enginecli bootstrap + mcpserver|
+| forge                   | v0.39.0  | enginecli bootstrap + mcpserver|
 | go-sdk (MCP)            | v1.4.0   | MCP protocol types             |
 | kin-openapi             | v0.133.0 | OpenAPI spec parsing           |
 | oapi-codegen/runtime    | v1.2.0   | Generated client runtime       |

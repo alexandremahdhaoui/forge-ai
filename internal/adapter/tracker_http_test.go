@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -418,7 +419,7 @@ func TestAPIError_404(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
-	if got := err.Error(); !contains(got, "404") {
+	if got := err.Error(); !strings.Contains(got, "404") {
 		t.Errorf("expected error to contain 404, got: %s", got)
 	}
 }
@@ -433,7 +434,7 @@ func TestAPIError_500(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
-	if got := err.Error(); !contains(got, "500") {
+	if got := err.Error(); !strings.Contains(got, "500") {
 		t.Errorf("expected error to contain 500, got: %s", got)
 	}
 }
@@ -860,17 +861,4 @@ func writeJSON(t *testing.T, w http.ResponseWriter, v any) {
 	}
 }
 
-// contains checks if s contains substr. Using a helper to avoid importing strings.
-func contains(s, substr string) bool {
-	return len(s) >= len(substr) && searchString(s, substr)
-}
-
-func searchString(s, substr string) bool {
-	for i := 0; i <= len(s)-len(substr); i++ {
-		if s[i:i+len(substr)] == substr {
-			return true
-		}
-	}
-	return false
-}
 
